@@ -1,0 +1,312 @@
+# BIBLIOTEK
+import random
+import pygame
+pygame.init()
+pygame.font.init()
+
+# LAG OVERFLATE
+surface = pygame.display.set_mode((700, 450))
+pygame.display.set_caption("Spill")
+
+# FARGER
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+DARKGREEN = (0, 100, 0)
+
+ORANGE = (255, 166, 0)
+BROWN = (244, 164, 96)
+BLUE = (176, 196, 222)
+PURPLE = (211, 160, 211)
+
+# VERDIER
+game = True
+gameover = False
+begun = False
+score = 0
+ingamescore = 0
+ingamescorepos = 650
+color = random.randint(1, 4)
+
+y = 180
+v = 1
+a = 1
+dt1 = 0
+dt2 = 0
+
+x1 = random.randint(700, 1100)
+x2 = random.randint(700, 1100)
+x3 = random.randint(700, 1100)
+x4 = random.randint(700, 1100)
+x5 = random.randint(700, 1100)
+
+y1 = random.randint(20, 90)
+y2 = random.randint(90, 180)
+y3 = random.randint(180, 270)
+y4 = random.randint(270, 350)
+y5 = random.randint(350, 430)
+
+x11 = random.randint(700, 1100)
+x22 = random.randint(700, 1100)
+x33 = random.randint(700, 1100)
+x44 = random.randint(700, 1100)
+x55 = random.randint(700, 1100)
+
+y11 = random.randint(20, 90)
+y22 = random.randint(90, 180)
+y33 = random.randint(180, 270)
+y44 = random.randint(270, 350)
+y55 = random.randint(350, 430)
+
+# TEKST
+myfont = pygame.font.SysFont('Arial', 120)
+myfont2 = pygame.font.SysFont('Arial', 30)
+myfont3 = pygame.font.SysFont('Arial', 35)
+myfont4 = pygame.font.SysFont('Arial', 15)
+textsurface2 = myfont2.render("Trykk return for å prøve igjen.", True, BLACK)
+textsurface3 = myfont2.render("Trykk space for å starte.", True, GREEN)
+textsurface4 = myfont.render(str(ingamescore), True, RED)
+
+# SPILLLØKKE
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+
+    # SPILL
+    if game is True:
+
+        ingamescore += 0.05
+
+        # RENDERING
+        surface.fill(BLACK)
+
+        if begun is False:
+            surface.blit(textsurface3, (416, 18))
+
+        player = pygame.Rect(100, y, 20, 20)
+        projektil1 = pygame.Rect(x1, y1, 20, 20)
+        projektil2 = pygame.Rect(x2, y2, 20, 20)
+        projektil3 = pygame.Rect(x3, y3, 20, 20)
+        projektil4 = pygame.Rect(x4, y4, 20, 20)
+        projektil5 = pygame.Rect(x5, y5, 20, 20)
+
+        projektil11 = pygame.Rect(x11, y11, 17, 17)
+        projektil22 = pygame.Rect(x22, y22, 17, 17)
+        projektil33 = pygame.Rect(x33, y33, 17, 17)
+        projektil44 = pygame.Rect(x44, y44, 17, 17)
+        projektil55 = pygame.Rect(x55, y55, 17, 17)
+
+        pygame.draw.rect(surface, DARKGREEN, projektil11)
+        pygame.draw.rect(surface, DARKGREEN, projektil22)
+        pygame.draw.rect(surface, DARKGREEN, projektil33)
+        pygame.draw.rect(surface, DARKGREEN, projektil44)
+        pygame.draw.rect(surface, DARKGREEN, projektil55)
+
+        if begun is True:
+
+            if ingamescore >= 100:
+                ingamescorepos = 640
+
+            if ingamescore >= 1000:
+                ingamescorepos = 630
+
+            if ingamescore >= 10000:
+                ingamescorepos = 610
+
+            if ingamescore >= 100000:
+                ingamescorepos = 600
+
+            if ingamescore >= 1000000:
+                ingamescorepos = 590
+
+            if ingamescore >= 10000000:
+                ingamescorepos = 580
+
+            ingamescore = round(score)
+            if ingamescore >= 99999999:
+                ingamescore = 99999999
+            textsurface4 = myfont3.render(str(ingamescore), True, RED)
+            surface.blit(textsurface4, (ingamescorepos, 10))
+
+        pygame.draw.rect(surface, RED, player)
+        pygame.draw.rect(surface, GREEN, projektil1)
+        pygame.draw.rect(surface, GREEN, projektil2)
+        pygame.draw.rect(surface, GREEN, projektil3)
+        pygame.draw.rect(surface, GREEN, projektil4)
+        pygame.draw.rect(surface, GREEN, projektil5)
+
+        # KNAPPER/KONTROLL
+        button = pygame.key.get_pressed()
+
+        if button[pygame.K_SPACE]:
+            begun = True
+            dt1 = 0
+            y -= (v + a * dt2) / 1000
+            dt2 += 1
+
+        else:
+            dt2 = 0
+            y += (v + a * dt1) / 1000
+            dt1 += 1
+
+        # RESTRIKSJON
+        if y >= 430:
+            y = 430
+
+        # BEVEGELSE AV PROJEKTILER
+        if begun is True:
+            x1 -= 0.8
+            x2 -= 0.8
+            x3 -= 0.8
+            x4 -= 0.8
+            x5 -= 0.8
+
+            x11 -= 0.4
+            x22 -= 0.4
+            x33 -= 0.4
+            x44 -= 0.4
+            x55 -= 0.4
+
+        if x1 < 0:
+            x1 = random.randint(700, 1100)
+            y1 = random.randint(20, 90)
+
+        if x2 < 0:
+            x2 = random.randint(700, 1100)
+            y2 = random.randint(90, 180)
+
+        if x3 < 0:
+            x3 = random.randint(700, 1100)
+            y3 = random.randint(180, 270)
+
+        if x4 < 0:
+            x4 = random.randint(700, 1100)
+            y4 = random.randint(270, 350)
+
+        if x5 < 0:
+            x5 = random.randint(700, 1100)
+            y5 = random.randint(350, 430)
+
+        if x11 < 0:
+            x11 = random.randint(700, 1100)
+            y11 = random.randint(20, 90)
+
+        if x22 < 0:
+            x22 = random.randint(700, 1100)
+            y22 = random.randint(90, 180)
+
+        if x33 < 0:
+            x33 = random.randint(700, 1100)
+            y33 = random.randint(180, 270)
+
+        if x44 < 0:
+            x44 = random.randint(700, 1100)
+            y44 = random.randint(270, 350)
+
+        if x55 < 0:
+            x55 = random.randint(700, 1100)
+            y55 = random.randint(350, 430)
+
+        # KOLLISJON
+        if player.colliderect(projektil1):
+            game = False
+            gameover = True
+        if player.colliderect(projektil2):
+            game = False
+            gameover = True
+        if player.colliderect(projektil3):
+            game = False
+            gameover = True
+        if player.colliderect(projektil4):
+            game = False
+            gameover = True
+        if player.colliderect(projektil5):
+            game = False
+            gameover = True
+
+        # KOLLISJON MED KANTER
+        if y >= 430 and begun is True:
+            game = False
+            gameover = True
+
+        if y <= 0 and begun is True:
+            game = False
+            gameover = True
+
+        # SCORE
+        score += 0.05
+
+    # GAMEOVER
+    if gameover is True:
+
+        # RENDERING
+        if color == 1:
+            surface.fill(ORANGE)
+
+        if color == 2:
+            surface.fill(BROWN)
+
+        if color == 3:
+            surface.fill(BLUE)
+
+        if color == 4:
+            surface.fill(PURPLE)
+
+        score = round(score)
+        if score >= 99999999:
+            score = 99999999
+        textsurface = myfont.render(str(score), True, BLACK)
+        textsurface5 = myfont4.render("Laget av Nils", True, BLACK)
+        surface.blit(textsurface, (10, 210))
+        surface.blit(textsurface2, (10, 340))
+        surface.blit(textsurface5, (623, 4))
+
+        # KNAPPER/KONTROLL
+        button = pygame.key.get_pressed()
+
+        if button[pygame.K_RETURN]:
+            game = True
+            gameover = False
+            begun = False
+            score = 0
+
+            y = 180
+            v = 1
+            a = 1
+            dt1 = 0
+            dt2 = 0
+            ingamescore = 0
+            ingamescorepos = 650
+            color = random.randint(1, 4)
+
+            x1 = random.randint(700, 1100)
+            x2 = random.randint(700, 1100)
+            x3 = random.randint(700, 1100)
+            x4 = random.randint(700, 1100)
+            x5 = random.randint(700, 1100)
+
+            y1 = random.randint(20, 90)
+            y2 = random.randint(90, 180)
+            y3 = random.randint(180, 270)
+            y4 = random.randint(270, 350)
+            y5 = random.randint(350, 430)
+
+            x11 = random.randint(700, 1100)
+            x22 = random.randint(700, 1100)
+            x33 = random.randint(700, 1100)
+            x44 = random.randint(700, 1100)
+            x55 = random.randint(700, 1100)
+
+            y11 = random.randint(20, 90)
+            y22 = random.randint(90, 180)
+            y33 = random.randint(180, 270)
+            y44 = random.randint(270, 350)
+            y55 = random.randint(350, 430)
+
+    # FORSINKELSE
+    pygame.time.delay(1)
+
+    # OPPDATER OVERFLATE
+    pygame.display.flip()
